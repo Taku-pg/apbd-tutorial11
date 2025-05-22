@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace apbd_tutorial11.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class fixedEntity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -67,23 +67,23 @@ namespace apbd_tutorial11.Migrations
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IdPatient = table.Column<int>(type: "int", nullable: false),
-                    IdDoctor = table.Column<int>(type: "int", nullable: false),
-                    DoctorIdDoctor = table.Column<int>(type: "int", nullable: true),
-                    PatientIdPatient = table.Column<int>(type: "int", nullable: true)
+                    IdDoctor = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Prescription", x => x.IdPrescription);
                     table.ForeignKey(
-                        name: "FK_Prescription_Doctors_DoctorIdDoctor",
-                        column: x => x.DoctorIdDoctor,
+                        name: "FK_Prescription_Doctors_IdDoctor",
+                        column: x => x.IdDoctor,
                         principalTable: "Doctors",
-                        principalColumn: "IdDoctor");
+                        principalColumn: "IdDoctor",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Prescription_Patient_PatientIdPatient",
-                        column: x => x.PatientIdPatient,
+                        name: "FK_Prescription_Patient_IdPatient",
+                        column: x => x.IdPatient,
                         principalTable: "Patient",
-                        principalColumn: "IdPatient");
+                        principalColumn: "IdPatient",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -141,11 +141,11 @@ namespace apbd_tutorial11.Migrations
 
             migrationBuilder.InsertData(
                 table: "Prescription",
-                columns: new[] { "IdPrescription", "Date", "DoctorIdDoctor", "DueDate", "IdDoctor", "IdPatient", "PatientIdPatient" },
+                columns: new[] { "IdPrescription", "Date", "DueDate", "IdDoctor", "IdPatient" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 5, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), null, new DateTime(2025, 5, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 1, null },
-                    { 2, new DateTime(2025, 4, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), null, new DateTime(2025, 6, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 2, null }
+                    { 1, new DateTime(2025, 5, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 5, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 1 },
+                    { 2, new DateTime(2025, 4, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 6, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -158,14 +158,14 @@ namespace apbd_tutorial11.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Prescription_DoctorIdDoctor",
+                name: "IX_Prescription_IdDoctor",
                 table: "Prescription",
-                column: "DoctorIdDoctor");
+                column: "IdDoctor");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Prescription_PatientIdPatient",
+                name: "IX_Prescription_IdPatient",
                 table: "Prescription",
-                column: "PatientIdPatient");
+                column: "IdPatient");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Prescription_Medicament_IdPrescription",

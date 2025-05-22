@@ -14,4 +14,7 @@ public class PrescriptionMedicament
     public int? Does { get; set; }
     [MaxLength(100)]
     public string Details { get; set; }
+    
+    public Prescription Prescription { get; set; }
+    public Medicament Medicament { get; set; }
 }

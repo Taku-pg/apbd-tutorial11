@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace apbd_tutorial11.Controller;
 
 [ApiController]
-[Route("/api/[controller]")]
+[Route("api/[controller]")]
 public class PrescriptionController:ControllerBase
 {
     private readonly IPrescriptionService _prescriptionService;
@@ -29,6 +29,6 @@ public class PrescriptionController:ControllerBase
         {
             return BadRequest(e.Message);
         }
-        return Ok();
+        return Created();
     }
 }

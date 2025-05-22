@@ -32,7 +32,7 @@ public class PrescriptionService : IPrescriptionService
             throw new BadRequestException("Number of different medicament is less than 10");
         }
 
-        if (prescription.DueDate >= prescription.Date)
+        if (prescription.DueDate < prescription.Date)
         {
             throw new BadRequestException("Due date cannot be greater than prescription date");
         }
@@ -44,7 +44,6 @@ public class PrescriptionService : IPrescriptionService
         { 
             _context.Patients.Add(new Patient 
             { 
-                IdPatient = prescription.Patient.IdPatient, 
                 FirstName = prescription.Patient.FirstName, 
                 LastName = prescription.Patient.LastName, 
                 BirthDate = prescription.Patient.BirthDate,
@@ -60,6 +59,8 @@ public class PrescriptionService : IPrescriptionService
         };
         
         await _context.Prescriptions.AddAsync(newPrescription);
+
+        await _context.SaveChangesAsync();
 
         
 

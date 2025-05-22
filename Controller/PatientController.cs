@@ -14,12 +14,14 @@ public class PatientController : ControllerBase
         _patientService = patientService;
     }
 
-    [HttpGet("/{id}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id)
     {
         var res= await _patientService.GetPatient(id);
-        if(res == null)
+        if (res == null)
             return NotFound();
+        
+            
         return Ok(res);
     }
 }

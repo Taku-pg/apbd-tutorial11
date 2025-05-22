@@ -25,25 +25,27 @@ public class PatientService : IPatientService
                             FirstName = p.FirstName, 
                             LastName = p.LastName, 
                             BirthDate = p.BirthDate,
+                            
                             Prescription =p.Prescriptions.Select(pre=> new PrescriptionDetailDTO
                             {
                                 IdPrescription = pre.IdPrescription,
                                 Date = pre.Date,
                                 DueDate = pre.DueDate,
                                 Medicament = pre.Medicaments
-                                                .Select(pm=>new MedicamentDetailDTO
+                                                .Join(_context.Medicaments,
+                                                        pm=>pm.IdMedicament,
+                                                        m=>m.IdMedicament,
+                                                        (pm,m) => new MedicamentDetailDTO
                                                 {
                                                     IdMedicament = pm.IdMedicament,
-                                                    Does = pm.Does,
-                                                    Name = _context.Medicaments
-                                                            .Where(m=>m.IdMedicament==pm.IdMedicament)
-                                                            .Select(m=>m.Name)
-                                                            .First(),
-                                                    Description = _context.Medicaments
-                                                        .Where(m=>m.IdMedicament==pm.IdMedicament)
-                                                        .Select(m=>m.Name)
-                                                        .First(),    
+                                                    Does = pm.Does ?? 0,
+                                                    Name = m.Name,
+                                                    Description = m.Description,    
                                                 }).ToList(),
+                                Doctor = _context.Doctors
+                                        .Where(d=>d.IdDoctor==pre.IdDoctor)
+                                        .Select(d=>new DoctorDTO
+                                        { IdDoctor = pre.IdDoctor, FirstName = d.FirstName}).First() 
                             }).OrderBy(pre=>pre.Date).ToList()
                         })
                         .FirstOrDefaultAsync();

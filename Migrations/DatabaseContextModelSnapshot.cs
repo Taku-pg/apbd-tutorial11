@@ -163,9 +163,6 @@ namespace apbd_tutorial11.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DoctorIdDoctor")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
 
@@ -175,14 +172,11 @@ namespace apbd_tutorial11.Migrations
                     b.Property<int>("IdPatient")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PatientIdPatient")
-                        .HasColumnType("int");
-
                     b.HasKey("IdPrescription");
 
-                    b.HasIndex("DoctorIdDoctor");
+                    b.HasIndex("IdDoctor");
 
-                    b.HasIndex("PatientIdPatient");
+                    b.HasIndex("IdPatient");
 
                     b.ToTable("Prescription");
 
@@ -245,28 +239,40 @@ namespace apbd_tutorial11.Migrations
 
             modelBuilder.Entity("apbd_tutorial11.Model.Prescription", b =>
                 {
-                    b.HasOne("apbd_tutorial11.Model.Doctor", null)
+                    b.HasOne("apbd_tutorial11.Model.Doctor", "Doctor")
                         .WithMany("Prescriptions")
-                        .HasForeignKey("DoctorIdDoctor");
+                        .HasForeignKey("IdDoctor")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("apbd_tutorial11.Model.Patient", null)
+                    b.HasOne("apbd_tutorial11.Model.Patient", "Patient")
                         .WithMany("Prescriptions")
-                        .HasForeignKey("PatientIdPatient");
+                        .HasForeignKey("IdPatient")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("apbd_tutorial11.Model.PrescriptionMedicament", b =>
                 {
-                    b.HasOne("apbd_tutorial11.Model.Medicament", null)
+                    b.HasOne("apbd_tutorial11.Model.Medicament", "Medicament")
                         .WithMany("Prescriptions")
                         .HasForeignKey("IdMedicament")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("apbd_tutorial11.Model.Prescription", null)
+                    b.HasOne("apbd_tutorial11.Model.Prescription", "Prescription")
                         .WithMany("Medicaments")
                         .HasForeignKey("IdPrescription")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Medicament");
+
+                    b.Navigation("Prescription");
                 });
 
             modelBuilder.Entity("apbd_tutorial11.Model.Doctor", b =>
